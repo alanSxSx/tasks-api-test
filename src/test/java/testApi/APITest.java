@@ -49,4 +49,26 @@ public class APITest {
 			.body("message", CoreMatchers.is("Due date must not be in past"))
 		;
 	}
+	
+	@Test
+	public void deveRemoverTarefaComSucesso() {
+	    // Cria uma nova tarefa
+	    Integer id = RestAssured.given()
+	        .body("{\"task\":\"Tarefa a ser removida\",\"dueDate\":\"2025-12-30\"}")
+	        .contentType(ContentType.JSON)
+	    .when()
+	        .post("/todo")
+	    .then()
+	        .statusCode(201)
+	        .extract()
+	        .path("id"); // Extrai o ID da resposta
+
+	    // Remove a tarefa criada
+	    RestAssured.given()
+	    .when()
+	        .delete("/todo/" + id)
+	    .then()
+	        .statusCode(204); // Ou 200, conforme a API
+	}
+	
 }
